@@ -1,10 +1,9 @@
 package com.control_2_tbd.repositories;
 
 import com.control_2_tbd.entities.UsuarioEntity;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
 
-@Repository
-public interface UsuarioRepository extends CrudRepository<UsuarioEntity, Long> {
+public interface UsuarioRepository {
 
+    public UsuarioEntity createUsuario(UsuarioEntity usuario);
+    public UsuarioEntity findByUsuarioYContraseña(String usuario, String contraseña);
 }

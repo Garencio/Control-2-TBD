@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Tareas</title>
+</head>
+<body>
+
+<h2>Gestión de Tareas</h2>
+
+<!-- Sección de Crear Tarea -->
+<form action="/tareas" method="post">
+    <label for="titulo">Título:</label>
+    <input type="text" id="titulo" name="titulo" required>
+    <br><br>
+    <label for="descripcion">Descripción:</label>
+    <textarea id="descripcion" name="descripcion" required></textarea>
+    <br><br>
+    <label for="vencimiento">Fecha de Vencimiento:</label>
+    <input type="date" id="vencimiento" name="vencimiento" required>
+    <br><br>
+    <input type="submit" value="Crear Tarea">
+</form>
+
+<!-- Lista de Tareas -->
+<div class="lista-tareas">
+    <h2>Tareas</h2>
+    <ul>
+        <li th:each="tarea : ${tareas}">
+            <h3 th:text="${tarea.titulo}"></h3>
+            <p th:text="${tarea.descripcion}"></p>
+            <p>Fecha de Vencimiento: <span th:text="${tarea.vencimiento}"></span></p>
+            <form action="/tareas/editar" method="get" th:object="${tarea}">
+                <input type="hidden" name="id" th:value="${tarea.id}">
+                <input type="submit" value="Editar">
+            </form>
+            <form action="/tareas/eliminar" method="post" th:object="${tarea}">
+                <input type="hidden" name="id" th:value="${tarea.id}">
+                <input type="submit" value="Eliminar">
+            </form>
+            <form action="/tareas/completar" method="post" th:object="${tarea}">
+                <input type="hidden" name="id" th:value="${tarea.id}">
+                <input type="submit" value="Marcar como Completada">
+            </form>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>

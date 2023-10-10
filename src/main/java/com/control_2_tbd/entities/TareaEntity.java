@@ -18,7 +18,7 @@ public class TareaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false)
-    private Long id;
+    private int id;
 
     private String titulo;
 
@@ -31,6 +31,8 @@ public class TareaEntity {
 
     @ManyToOne
     @JoinColumn(name = "id_usuario", nullable = false)
+    @Column(name = "id_usuario")
     private UsuarioEntity usuario;
+
 
 }

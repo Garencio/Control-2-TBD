@@ -35,7 +35,7 @@ public class UsuarioService {
     public String login(@ModelAttribute UsuarioEntity usuario, HttpSession session) {
         UsuarioEntity usuarioAutenticado = usuarioRepository.findByUsuarioYContraseña(usuario.getNickname(), usuario.getContrasena());
         if (usuarioAutenticado != null) {
-            session.setAttribute("usuario", usuarioAutenticado);
+            session.setAttribute("idUsuario", usuarioAutenticado.getId());  // Guardar el id del usuario en la sesión
             return "redirect:/tareas";
         }
         return "login";

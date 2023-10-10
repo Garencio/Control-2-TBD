@@ -27,11 +27,11 @@ public class UsuarioRepositoryImp implements UsuarioRepository{
         }
     }
     @Override
-    public UsuarioEntity findByUsuarioYContraseña(String nickname, String contraseña) {
+    public UsuarioEntity findByUsuarioYContraseña(String nickname, String contrasena) {  // cambio de nombre de parámetro aquí
         try (Connection connection = sql2o.open()) {
-            return connection.createQuery("SELECT * FROM usuario WHERE nickname = :nickname AND contrasena = :contraseña")
+            return connection.createQuery("SELECT * FROM usuario WHERE nickname = :nickname AND contrasena = :contrasena")  // cambio de nombre de parámetro aquí
                     .addParameter("nickname", nickname)
-                    .addParameter("contrasena", contraseña)
+                    .addParameter("contrasena", contrasena)  // cambio de nombre de parámetro aquí
                     .executeAndFetchFirst(UsuarioEntity.class);
         } catch (Exception e) {
             System.out.println(e.getMessage());

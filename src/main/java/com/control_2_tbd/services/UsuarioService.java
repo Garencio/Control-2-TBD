@@ -3,11 +3,13 @@ package com.control_2_tbd.services;
 import com.control_2_tbd.entities.UsuarioEntity;
 import com.control_2_tbd.repositories.UsuarioRepository;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 
 @CrossOrigin
 @Controller
+@Service
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
 

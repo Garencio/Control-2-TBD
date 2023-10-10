@@ -14,28 +14,24 @@ public class TareaRepositoryImp implements TareaRepository {
     private Sql2o sql2o;
 
     @Override
-    public TareaEntity createTarea(TareaEntity tarea) {
+    public TareaEntity createTarea(TareaEntity tarea, Integer id_usuario) {
         try (Connection connection = sql2o.open()) {
-            if (tarea.getUsuario() == null) {
-                throw new IllegalArgumentException("Usuario no puede ser null");
-            }
             int id = (int) connection.createQuery("INSERT INTO tarea(titulo, descripcion, vencimiento, estado, id_usuario) VALUES (:titulo, :descripcion, :vencimiento, :estado, :id_usuario)", true)
                     .addParameter("titulo", tarea.getTitulo())
                     .addParameter("descripcion", tarea.getDescripcion())
                     .addParameter("vencimiento", tarea.getVencimiento())
-                    .addParameter("estado", tarea.getEstado())
-                    .addParameter("id_usuario", tarea.getUsuario().getId())  // Asegúrate de que el usuario esté establecido en la tarea
+                    .addParameter("estado", "Pendiente")
+                    .addParameter("id_usuario", id_usuario)  // Asegúrate de que el usuario esté establecido en la tarea
                     .executeUpdate()
                     .getKey();
             tarea.setId(id);
             return tarea;
         } catch (Exception e) {
+            System.out.println("ERROR");
             System.out.println(e.getMessage());
             return null;
         }
     }
-
-
 
     @Override
     public TareaEntity updateTarea(TareaEntity tarea) {

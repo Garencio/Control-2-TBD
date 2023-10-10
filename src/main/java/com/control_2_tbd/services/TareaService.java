@@ -39,12 +39,12 @@ public class TareaService {
     @PostMapping
     @ResponseBody
     public TareaEntity crearTarea(@ModelAttribute TareaEntity nuevaTarea, HttpSession session){
-        UsuarioEntity usuario = (UsuarioEntity) session.getAttribute("usuario");
-        if (usuario == null) {
+        Integer id_usuario = (Integer) session.getAttribute("idUsuario");
+        if (id_usuario == null) {
             return null;
         }
-        nuevaTarea.setUsuario(usuario);  // Asegúrate de que el UsuarioEntity esté establecido en la TareaEntity
-        return tareaRepository.createTarea(nuevaTarea);
+        System.out.println(id_usuario);
+        return tareaRepository.createTarea(nuevaTarea, id_usuario);
     }
 
     @PutMapping("/{id}")

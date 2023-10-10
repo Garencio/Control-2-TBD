@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 
-@CrossOrigin
-@Controller
-@Service
+
+@CrossOrigin(origins = "*") // Permite cualquier origen. En producción, restringe esto a tu dominio específico.
+@RestController
+@RequestMapping("/api")
+
 public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
 

@@ -20,6 +20,6 @@ public class UsuarioEntity {
 
     private String nickname;
 
-    private String contraseña;
+    private String contrasena;
 
 }

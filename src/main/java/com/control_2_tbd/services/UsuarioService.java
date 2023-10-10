@@ -8,17 +8,12 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @Controller
 public class UsuarioService {
-
     private final UsuarioRepository usuarioRepository;
 
     UsuarioService(UsuarioRepository usuarioRepository){
         this.usuarioRepository = usuarioRepository;
     }
 
-    @GetMapping("/")
-    public String index(){
-        return "redirect:/login";
-    }
     @GetMapping("/login")
     public String mostrarLogin() {
         return "login";
@@ -30,14 +25,15 @@ public class UsuarioService {
     }
 
     @PostMapping("/register")
-    public String register(@RequestBody UsuarioEntity nuevoUsuario){
-        usuarioRepository.createUsuario(nuevoUsuario);
-        return  "redirect:/";
+    @ResponseBody
+    public UsuarioEntity register(@ModelAttribute UsuarioEntity nuevoUsuario){
+        return usuarioRepository.createUsuario(nuevoUsuario);
     }
 
     @PostMapping("/login")
-    public String login(@RequestBody UsuarioEntity usuario){
-        usuarioRepository.findByUsuarioYContraseña(usuario.getNickname(), usuario.getContraseña());
-        return  "redirect:/";
+    @ResponseBody
+    public UsuarioEntity login(@ModelAttribute UsuarioEntity usuario){
+        return usuarioRepository.findByUsuarioYContraseña(usuario.getNickname(), usuario.getContrasena());
     }
 }
+

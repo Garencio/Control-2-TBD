@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
+import java.util.Optional;
 
 @Repository
 public class UsuarioRepositoryImp implements UsuarioRepository{
@@ -36,6 +37,19 @@ public class UsuarioRepositoryImp implements UsuarioRepository{
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
+        }
+    }
+    @Override
+    public Optional<UsuarioEntity> findById(Long id) {  // Implementa este método
+        try (Connection connection = sql2o.open()) {
+            return Optional.ofNullable(
+                    connection.createQuery("SELECT * FROM usuario WHERE id = :id")
+                            .addParameter("id", id)
+                            .executeAndFetchFirst(UsuarioEntity.class)
+            );
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return Optional.empty();
         }
     }
 }

@@ -4,6 +4,7 @@ import com.control_2_tbd.entities.UsuarioEntity;
 import com.control_2_tbd.repositories.UsuarioRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import javax.servlet.http.HttpSession;
 
 @CrossOrigin
 @Controller
@@ -31,9 +32,13 @@ public class UsuarioService {
     }
 
     @PostMapping("/login")
-    @ResponseBody
-    public UsuarioEntity login(@ModelAttribute UsuarioEntity usuario){
-        return usuarioRepository.findByUsuarioYContraseña(usuario.getNickname(), usuario.getContrasena());
+    public String login(@ModelAttribute UsuarioEntity usuario, HttpSession session) {
+        UsuarioEntity usuarioAutenticado = usuarioRepository.findByUsuarioYContraseña(usuario.getNickname(), usuario.getContrasena());
+        if (usuarioAutenticado != null) {
+            session.setAttribute("usuario", usuarioAutenticado);
+            return "redirect:/tareas" + usuarioAutenticado.getId();
+        }
+        return "login";
     }
-}
 
+}

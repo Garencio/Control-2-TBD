@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Date;
 
@@ -23,6 +24,7 @@ public class TareaEntity {
 
     private String descripcion;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date vencimiento;
 
     private String estado;

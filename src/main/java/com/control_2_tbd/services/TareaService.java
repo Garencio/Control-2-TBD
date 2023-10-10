@@ -11,7 +11,7 @@ import org.springframework.ui.Model;
 
 import java.util.List;
 
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @Controller
 @RequestMapping("/tareas")
 public class TareaService {

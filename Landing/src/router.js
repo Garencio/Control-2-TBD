@@ -1,11 +1,12 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Login from '@/components/UserLogin.vue';
 import Register from '@/components/UserRegistration.vue';
+import Tareas from "@/components/Tareas.vue";
 
 const routes = [
     {
         path: '/',
-        redirect: '/login'  // Esto redireccionará automáticamente la raíz a /login
+        redirect: '/login'
     },
     {
         path: '/login',
@@ -17,7 +18,20 @@ const routes = [
         name: 'Register',
         component: Register
     },
-    // otras rutas...
+    {
+        path: '/tareas',
+        component: Tareas,
+        beforeEnter: (to, from, next) => {
+            console.log('Checking auth:', localStorage.getItem('userId'));
+            if (localStorage.getItem('userId')) {
+                console.log('Authorized!');
+                next();
+            } else {
+                console.log('Unauthorized, redirecting to login.');
+                next('/login');
+            }
+        }
+    },
 ];
 
 

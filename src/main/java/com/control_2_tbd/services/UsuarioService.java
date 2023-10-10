@@ -2,6 +2,8 @@ package com.control_2_tbd.services;
 
 import com.control_2_tbd.entities.UsuarioEntity;
 import com.control_2_tbd.repositories.UsuarioRepository;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
@@ -31,18 +33,18 @@ public class UsuarioService {
 
     @PostMapping("/register")
     @ResponseBody
-    public UsuarioEntity register(@ModelAttribute UsuarioEntity nuevoUsuario){
+    public UsuarioEntity register(@RequestBody UsuarioEntity nuevoUsuario){
         return usuarioRepository.createUsuario(nuevoUsuario);
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute UsuarioEntity usuario, HttpSession session) {
+    public ResponseEntity<?> login(@RequestBody UsuarioEntity usuario) {
         UsuarioEntity usuarioAutenticado = usuarioRepository.findByUsuarioYContraseña(usuario.getNickname(), usuario.getContrasena());
         if (usuarioAutenticado != null) {
-            session.setAttribute("idUsuario", usuarioAutenticado.getId());  // Guardar el id del usuario en la sesión
-            return "redirect:/tareas";
+            return ResponseEntity.ok(usuarioAutenticado.getId());
         }
-        return "login";
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
     }
+
 
 }

@@ -18,6 +18,7 @@
 
 <script>
 import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -28,25 +29,25 @@ export default {
   methods: {
     async handleLogin() {
       try {
-        const response = await axios.post('http://localhost:8080/login', {
+        const response = await axios.post('http://localhost:8086/api/login', {
           nickname: this.username,
           contrasena: this.password
         });
 
-        if (response && response.data) {
-          // Si la autenticación es exitosa, puedes almacenar la información del usuario
-          // en el almacenamiento local o en una tienda Vuex, por ejemplo.
-          // Por ahora, solo mostraremos una alerta indicando éxito.
+        console.log(response.data);
 
+        if (response && response.data) {
+
+          localStorage.setItem('userId', response.data);
           alert('Inicio de sesión exitoso!');
-          // Aquí puedes redirigir al usuario a otra página o realizar otras acciones.
+          console.log(this.$router);
+          this.$router.push('/tareas');
 
         } else {
           alert('Credenciales inválidas. Por favor, intenta nuevamente.');
         }
 
       } catch (error) {
-        // Manejo de errores, por ejemplo si el backend no está disponible o si devuelve un error.
         alert('Error al iniciar sesión. Por favor, intenta nuevamente.');
       }
     }

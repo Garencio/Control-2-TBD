@@ -36,7 +36,7 @@ public class UsuarioService {
         UsuarioEntity usuarioAutenticado = usuarioRepository.findByUsuarioYContraseña(usuario.getNickname(), usuario.getContrasena());
         if (usuarioAutenticado != null) {
             session.setAttribute("usuario", usuarioAutenticado);
-            return "redirect:/tareas" + usuarioAutenticado.getId();
+            return "redirect:/tareas";
         }
         return "login";
     }

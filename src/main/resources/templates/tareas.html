@@ -9,7 +9,6 @@
 
 <h2>Gestión de Tareas</h2>
 
-<!-- Sección de Crear Tarea -->
 <form action="/tareas" method="post">
     <label for="titulo">Título:</label>
     <input type="text" id="titulo" name="titulo" required>
@@ -23,7 +22,6 @@
     <input type="submit" value="Crear Tarea">
 </form>
 
-<!-- Lista de Tareas -->
 <div class="lista-tareas">
     <h2>Tareas</h2>
     <ul>
@@ -38,10 +36,6 @@
             <form action="/tareas/eliminar" method="post" th:object="${tarea}">
                 <input type="hidden" name="id" th:value="${tarea.id}">
                 <input type="submit" value="Eliminar">
-            </form>
-            <form action="/tareas/completar" method="post" th:object="${tarea}">
-                <input type="hidden" name="id" th:value="${tarea.id}">
-                <input type="submit" value="Marcar como Completada">
             </form>
         </li>
     </ul>

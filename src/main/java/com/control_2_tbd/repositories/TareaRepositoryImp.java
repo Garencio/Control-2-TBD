@@ -21,7 +21,7 @@ public class TareaRepositoryImp implements TareaRepository {
                     .addParameter("descripcion", tarea.getDescripcion())
                     .addParameter("vencimiento", tarea.getVencimiento())
                     .addParameter("estado", "Pendiente")
-                    .addParameter("id_usuario", id_usuario)  // Asegúrate de que el usuario esté establecido en la tarea
+                    .addParameter("id_usuario", id_usuario)
                     .executeUpdate()
                     .getKey();
             tarea.setId(id);
@@ -32,7 +32,6 @@ public class TareaRepositoryImp implements TareaRepository {
             return null;
         }
     }
-
     @Override
     public TareaEntity updateTarea(TareaEntity tarea) {
         try (Connection connection = sql2o.open()) {
@@ -45,7 +44,6 @@ public class TareaRepositoryImp implements TareaRepository {
             return null;
         }
     }
-
     @Override
     public void deleteTarea(int id) {
         try (Connection connection = sql2o.open()) {
@@ -56,7 +54,6 @@ public class TareaRepositoryImp implements TareaRepository {
             System.out.println(e.getMessage());
         }
     }
-
     @Override
     public List<TareaEntity> findAllByUsuario(int idUsuario) {
         try (Connection connection = sql2o.open()) {
@@ -68,7 +65,17 @@ public class TareaRepositoryImp implements TareaRepository {
             return null;
         }
     }
-
+    @Override
+    public TareaEntity findById(int id) {
+        try (Connection connection = sql2o.open()) {
+            return connection.createQuery("SELECT * FROM tarea WHERE id = :id")
+                    .addParameter("id", id)
+                    .executeAndFetchFirst(TareaEntity.class);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
+    }
     @Override
     public List<TareaEntity> findAllCompletedByUsuario(int idUsuario) {
         try (Connection connection = sql2o.open()) {

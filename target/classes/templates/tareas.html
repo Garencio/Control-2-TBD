@@ -39,10 +39,6 @@
                 <input type="hidden" name="id" th:value="${tarea.id}">
                 <input type="submit" value="Eliminar">
             </form>
-            <form action="/tareas/completar" method="post" th:object="${tarea}">
-                <input type="hidden" name="id" th:value="${tarea.id}">
-                <input type="submit" value="Marcar como Completada">
-            </form>
         </li>
     </ul>
 </div>

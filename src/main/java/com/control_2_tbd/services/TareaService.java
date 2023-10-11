@@ -1,7 +1,6 @@
 package com.control_2_tbd.services;
 
 import com.control_2_tbd.entities.TareaEntity;
-import com.control_2_tbd.entities.UsuarioEntity;
 import com.control_2_tbd.repositories.TareaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,16 +46,27 @@ public class TareaService {
         return tareaRepository.createTarea(nuevaTarea, id_usuario);
     }
 
-    @PutMapping("/{id}")
-    @ResponseBody
-    public TareaEntity actualizarTarea(@PathVariable int id, @RequestBody TareaEntity tareaActualizada){
-        tareaActualizada.setId(id);
-        return tareaRepository.updateTarea(tareaActualizada);
+    //@PutMapping("/{id}")
+    @PostMapping("/actualizar")
+    public String actualizarTarea(@ModelAttribute TareaEntity tareaActualizada) {
+        tareaRepository.updateTarea(tareaActualizada);
+        return "redirect:/tareas";
     }
 
-    @DeleteMapping("/{id}")
-    @ResponseBody
-    public void eliminarTarea(@PathVariable int id){
-        tareaRepository.deleteTarea(id);
+    @GetMapping("/editar")
+    public String editarTarea(@RequestParam int id, Model model) {
+        TareaEntity tarea = tareaRepository.findById(id);
+        if (tarea != null) {
+            model.addAttribute("tarea", tarea);
+            return "editarTarea";
+        } else {
+            return "redirect:/tareas";
+        }
     }
+    @PostMapping("/eliminar")
+    public String eliminarTarea(@RequestParam int id){
+        tareaRepository.deleteTarea(id);
+        return "redirect:/tareas";
+    }
+
 }

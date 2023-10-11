@@ -9,4 +9,5 @@ public interface TareaRepository {
     void deleteTarea(int id);
     List<TareaEntity> findAllByUsuario(int idUsuario);
     List<TareaEntity> findAllCompletedByUsuario(int idUsuario);
+    TareaEntity findById(int id);
 }

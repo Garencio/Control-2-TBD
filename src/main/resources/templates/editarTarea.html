@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Tarea</title>
+</head>
+<body>
+
+<h2>Editar Tarea</h2>
+
+<form action="/tareas/actualizar" method="post" th:object="${tarea}">
+    <input type="hidden" th:field="*{id}"/>
+    <label for="titulo">Título:</label>
+    <input type="text" id="titulo" th:field="*{titulo}" required>
+    <br><br>
+    <label for="descripcion">Descripción:</label>
+    <textarea id="descripcion" th:field="*{descripcion}" required></textarea>
+    <br><br>
+    <label for="vencimiento">Fecha de Vencimiento:</label>
+    <input type="date" id="vencimiento" th:field="*{vencimiento}" required>
+    <br><br>
+    <label for="estado">Estado:</label>
+    <select id="estado" th:field="*{estado}">
+        <option value="Pendiente">Pendiente</option>
+        <option value="Completado">Completado</option>
+    </select>
+    <br><br>
+    <input type="submit" value="Actualizar Tarea">
+</form>
+
+</body>
+</html>

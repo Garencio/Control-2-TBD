@@ -16,7 +16,7 @@ public class UsuarioRepositoryImp implements UsuarioRepository{
         try (Connection connection = sql2o.open()) {
             int id = (int) connection.createQuery("INSERT INTO usuario(nickname, contrasena) VALUES (:nickname, :contrasena)",true)
                     .addParameter("nickname", usuario.getNickname())
-                    .addParameter("contrasena", usuario.getContrasena())  // Corregido aquí
+                    .addParameter("contrasena", usuario.getContrasena())
                     .executeUpdate().getKey();
             usuario.setId(id);
             return usuario;
@@ -26,11 +26,11 @@ public class UsuarioRepositoryImp implements UsuarioRepository{
         }
     }
     @Override
-    public UsuarioEntity findByUsuarioYContraseña(String nickname, String contrasena) {  // cambio de nombre de parámetro aquí
+    public UsuarioEntity findByUsuarioYContraseña(String nickname, String contrasena) {
         try (Connection connection = sql2o.open()) {
-            return connection.createQuery("SELECT * FROM usuario WHERE nickname = :nickname AND contrasena = :contrasena")  // cambio de nombre de parámetro aquí
+            return connection.createQuery("SELECT * FROM usuario WHERE nickname = :nickname AND contrasena = :contrasena")
                     .addParameter("nickname", nickname)
-                    .addParameter("contrasena", contrasena)  // cambio de nombre de parámetro aquí
+                    .addParameter("contrasena", contrasena)
                     .executeAndFetchFirst(UsuarioEntity.class);
         } catch (Exception e) {
             System.out.println(e.getMessage());

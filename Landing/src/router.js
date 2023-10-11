@@ -19,21 +19,19 @@ const routes = [
         component: Register
     },
     {
-        path: '/tareas',
+        path: '/tareas/:idUsuario',
         component: Tareas,
+        name: 'tareas',
         beforeEnter: (to, from, next) => {
-            console.log('Checking auth:', localStorage.getItem('userId'));
-            if (localStorage.getItem('userId')) {
-                console.log('Authorized!');
+            if (localStorage.getItem('userId') == to.params.idUsuario) {
                 next();
             } else {
-                console.log('Unauthorized, redirecting to login.');
+                alert('Acceso no autorizado.');
                 next('/login');
             }
         }
     },
 ];
-
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.VITE_BASE_URL || '/'),

@@ -65,6 +65,7 @@ public class TareaRepositoryImp implements TareaRepository {
             return null;
         }
     }
+
     @Override
     public TareaEntity findById(int id) {
         try (Connection connection = sql2o.open()) {

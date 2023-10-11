@@ -50,7 +50,7 @@ export default {
 
       // Llamada al backend
       try {
-        const response = await api.post('/register', {
+        const response = await api.post('http://localhost:8080/api/register', {
           nickname: this.username,
           contrasena: this.password
         });

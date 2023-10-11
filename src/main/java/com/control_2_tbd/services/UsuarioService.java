@@ -2,47 +2,44 @@ package com.control_2_tbd.services;
 
 import com.control_2_tbd.entities.UsuarioEntity;
 import com.control_2_tbd.repositories.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 
 
 @CrossOrigin(origins = "*")
-@Controller
-//@RequestMapping("/api")
+@RestController
+@RequestMapping("/api")
 
 public class UsuarioService {
+    @Autowired
     private final UsuarioRepository usuarioRepository;
 
-    UsuarioService(UsuarioRepository usuarioRepository){
+    public UsuarioService(UsuarioRepository usuarioRepository){
         this.usuarioRepository = usuarioRepository;
     }
 
-    @GetMapping("/login")
-    public String mostrarLogin() {
-        return "login";
-    }
-
-    @GetMapping("/register")
-    public String mostrarRegister() {
-        return "register";
-    }
-
     @PostMapping("/register")
-    //@ResponseBody
-    public UsuarioEntity register(@RequestBody UsuarioEntity nuevoUsuario){
-        return usuarioRepository.createUsuario(nuevoUsuario);
+    public ResponseEntity<UsuarioEntity> register(@RequestBody UsuarioEntity usuario) {
+        UsuarioEntity user = usuarioRepository.createUsuario(usuario);
+        if(user == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute UsuarioEntity usuario, HttpSession session) {
-        UsuarioEntity usuarioAutenticado = usuarioRepository.findByUsuarioYContraseña(usuario.getNickname(), usuario.getContrasena());
-        if (usuarioAutenticado != null) {
-            session.setAttribute("idUsuario", usuarioAutenticado.getId());
-            return "redirect:/tareas";
+    public ResponseEntity<UsuarioEntity> login(@RequestBody UsuarioEntity usuario) {
+        UsuarioEntity user = usuarioRepository.findByUsuarioYContraseña(usuario.getNickname(), usuario.getContrasena());
+        if(user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
-        return "login";
+        return ResponseEntity.ok(user);
     }
+
 
 
 }

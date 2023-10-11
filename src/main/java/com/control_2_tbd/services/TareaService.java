@@ -3,70 +3,77 @@ package com.control_2_tbd.services;
 import com.control_2_tbd.entities.TareaEntity;
 import com.control_2_tbd.repositories.TareaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import org.springframework.ui.Model;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
 @CrossOrigin(origins = "*")
-@Controller
-@RequestMapping("/tareas")
+@RestController
+@RequestMapping("/api/tareas")
 public class TareaService {
 
-    @Autowired
     private final TareaRepository tareaRepository;
 
+    @Autowired
     public TareaService(TareaRepository tareaRepository){
         this.tareaRepository = tareaRepository;
     }
 
-    @GetMapping
-    public String obtenerTodasLasTareas(HttpSession session, Model model){
-        int idUsuario = (int) session.getAttribute("idUsuario");
+    // Obtener todas las tareas de un usuario específico
+    @GetMapping("/{idUsuario}")
+    public ResponseEntity<List<TareaEntity>> obtenerTodasLasTareas(@PathVariable int idUsuario) {
         List<TareaEntity> tareas = tareaRepository.findAllByUsuario(idUsuario);
-        model.addAttribute("tareas", tareas);
-        return "tareas";
+        return ResponseEntity.ok(tareas);
     }
 
-    @GetMapping("/completadas")
-    public List<TareaEntity> obtenerTareasCompletadas(@RequestParam int idUsuario){
-        return tareaRepository.findAllCompletedByUsuario(idUsuario);
+    // Obtener tareas completadas de un usuario específico
+    @GetMapping("/{idUsuario}/completadas")
+    public ResponseEntity<List<TareaEntity>> obtenerTareasCompletadas(@PathVariable int idUsuario) {
+        List<TareaEntity> tareas = tareaRepository.findAllCompletedByUsuario(idUsuario);
+        return ResponseEntity.ok(tareas);
     }
 
+    // Crear una nueva tarea
     @PostMapping
-    @ResponseBody
-    public TareaEntity crearTarea(@ModelAttribute TareaEntity nuevaTarea, HttpSession session){
-        Integer id_usuario = (Integer) session.getAttribute("idUsuario");
-        if (id_usuario == null) {
-            return null;
+    public ResponseEntity<TareaEntity> crearTarea(@RequestBody TareaEntity nuevaTarea) {
+        if (nuevaTarea.getUsuario() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-        System.out.println(id_usuario);
-        return tareaRepository.createTarea(nuevaTarea, id_usuario);
+        TareaEntity tarea = tareaRepository.createTarea(nuevaTarea, nuevaTarea.getUsuario().getId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(tarea);
     }
 
-    //@PutMapping("/{id}")
-    @PostMapping("/actualizar")
-    public String actualizarTarea(@ModelAttribute TareaEntity tareaActualizada) {
-        tareaRepository.updateTarea(tareaActualizada);
-        return "redirect:/tareas";
+    // Actualizar una tarea
+    @PutMapping("/{idTarea}")
+    public ResponseEntity<TareaEntity> actualizarTarea(@PathVariable int idTarea, @RequestBody TareaEntity tareaActualizada) {
+        TareaEntity tarea = tareaRepository.updateTarea(tareaActualizada);
+        if (tarea == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        return ResponseEntity.ok(tarea);
     }
 
-    @GetMapping("/editar")
-    public String editarTarea(@RequestParam int id, Model model) {
-        TareaEntity tarea = tareaRepository.findById(id);
-        if (tarea != null) {
-            model.addAttribute("tarea", tarea);
-            return "editarTarea";
-        } else {
-            return "redirect:/tareas";
+    // Obtener una tarea específica para editar
+    @GetMapping("/editar/{idTarea}")
+    public ResponseEntity<TareaEntity> editarTarea(@PathVariable int idTarea) {
+        TareaEntity tarea = tareaRepository.findById(idTarea);
+        if (tarea == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
+        return ResponseEntity.ok(tarea);
     }
-    @PostMapping("/eliminar")
-    public String eliminarTarea(@RequestParam int id){
-        tareaRepository.deleteTarea(id);
-        return "redirect:/tareas";
+
+    // Eliminar una tarea
+    @DeleteMapping("/{idTarea}")
+    public ResponseEntity<Void> eliminarTarea(@PathVariable int idTarea) {
+        tareaRepository.deleteTarea(idTarea);
+        return ResponseEntity.noContent().build();
     }
 
 }

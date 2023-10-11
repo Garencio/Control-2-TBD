@@ -31,8 +31,9 @@ public class TareaEntity {
 
     @ManyToOne
     @JoinColumn(name = "id_usuario", nullable = false)
-    @Column(name = "id_usuario")
     private UsuarioEntity usuario;
+
+
 
 
 }

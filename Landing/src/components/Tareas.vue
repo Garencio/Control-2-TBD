@@ -32,6 +32,8 @@
 import axios from 'axios';
 
 export default {
+  name: 'TareasComponent',
+
   data() {
     return {
       titulo: '',
@@ -40,22 +42,27 @@ export default {
       tareas: []
     };
   },
+
   async mounted() {
     await this.fetchTareas();
   },
+
   methods: {
     async handleCreateTarea() {
       try {
-        const userId = localStorage.getItem('userId');
+        const userId = parseInt(localStorage.getItem('userId'));
+
         if (!userId) {
           alert('Por favor, inicie sesión primero.');
           return;
         }
-        const response = await axios.post('http://localhost:8086/api/tareas', {
+        const response = await axios.post('http://localhost:8080/api/tareas', {
           titulo: this.titulo,
           descripcion: this.descripcion,
           vencimiento: this.vencimiento,
-          id_usuario: userId
+          usuario: {
+            id: userId
+          }
         });
 
         if (response && response.data) {
@@ -70,14 +77,11 @@ export default {
         alert('Error al agregar la tarea.');
       }
     },
+
     async fetchTareas() {
       try {
-        const userId = localStorage.getItem('userId');
-        if (!userId) {
-          alert('Por favor, inicie sesión primero.');
-          return;
-        }
-        const response = await axios.get(`http://localhost:8086/api/tareas/${userId}`);
+        const userId = this.$route.params.idUsuario; // Obtiene el ID del usuario desde la URL
+        const response = await axios.get(`http://localhost:8080/api/tareas/${userId}`);
         if (response && response.data) {
           this.tareas = response.data;
         }
@@ -85,6 +89,7 @@ export default {
         alert('Error al obtener las tareas.');
       }
     },
+
     async handleLogout() {
       localStorage.removeItem('userId');
       this.$router.push('/login');
@@ -92,3 +97,4 @@ export default {
   }
 };
 </script>
+

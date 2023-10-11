@@ -7,4 +7,5 @@ public interface UsuarioRepository {
     public UsuarioEntity createUsuario(UsuarioEntity usuario);
     public UsuarioEntity findByUsuarioYContraseña(String usuario, String contraseña);
 
+
 }

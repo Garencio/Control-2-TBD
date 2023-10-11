@@ -1,4 +1,3 @@
-
 <template>
   <div>
     <h2>Login</h2>
@@ -29,24 +28,18 @@ export default {
   methods: {
     async handleLogin() {
       try {
-        const response = await axios.post('http://localhost:8086/api/login', {
+        const response = await axios.post('http://localhost:8080/api/login', {
           nickname: this.username,
           contrasena: this.password
         });
 
-        console.log(response.data);
-
         if (response && response.data) {
-
-          localStorage.setItem('userId', response.data);
+          localStorage.setItem('userId', response.data.id); // Asegúrate de guardar solo el ID del usuario
           alert('Inicio de sesión exitoso!');
-          console.log(this.$router);
-          this.$router.push('/tareas');
-
+          this.$router.push(`/tareas/${response.data.id}`);
         } else {
           alert('Credenciales inválidas. Por favor, intenta nuevamente.');
         }
-
       } catch (error) {
         alert('Error al iniciar sesión. Por favor, intenta nuevamente.');
       }

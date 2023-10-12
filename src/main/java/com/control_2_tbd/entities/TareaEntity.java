@@ -7,33 +7,19 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import java.util.Date;
-
-@Entity
-@Table(name = "tarea")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class TareaEntity {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
     private int id;
-
     private String titulo;
-
     private String descripcion;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date vencimiento;
-
     private String estado;
-
-    @ManyToOne
-    @JoinColumn(name = "id_usuario", nullable = false)
-    private UsuarioEntity usuario;
-
-
-
+    private int id_usuario; // Reemplaza la relación @ManyToOne por un campo simple
 
 }
+
+
+
+

@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -62,9 +64,10 @@ public class TareaRepositoryImp implements TareaRepository {
                     .executeAndFetch(TareaEntity.class);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return null;
+            return new ArrayList<>(); // Retorna una lista vacía en lugar de null
         }
     }
+
 
     @Override
     public TareaEntity findById(int id) {
@@ -86,6 +89,17 @@ public class TareaRepositoryImp implements TareaRepository {
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
+        }
+
+    }
+    public TareaEntity save(TareaEntity tarea) {
+        String sql = "UPDATE tarea SET estado = :estado WHERE id = :id";
+        try (Connection con = sql2o.open()) {
+            con.createQuery(sql)
+                    .addParameter("estado", tarea.getEstado())
+                    .addParameter("id", tarea.getId())
+                    .executeUpdate();
+            return tarea;
         }
     }
 }

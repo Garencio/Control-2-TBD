@@ -10,5 +10,5 @@ public interface TareaRepository {
     List<TareaEntity> findAllByUsuario(int idUsuario);
     List<TareaEntity> findAllCompletedByUsuario(int idUsuario);
     TareaEntity findById(int id);
-
+    TareaEntity save(TareaEntity tarea);
 }

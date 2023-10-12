@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -32,6 +33,20 @@ public class TareaService {
         return ResponseEntity.ok(tareas);
     }
 
+    @PutMapping("/{idTarea}/completar")
+    public ResponseEntity<TareaEntity> completarTarea(@PathVariable int idTarea) {
+        Optional<TareaEntity> optionalTarea = Optional.ofNullable(tareaRepository.findById(idTarea));
+        if (optionalTarea.isPresent()) {
+            TareaEntity tarea = optionalTarea.get();
+            tarea.setEstado("Completada");
+            tareaRepository.save(tarea);
+            return ResponseEntity.ok(tarea);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+
     // Obtener tareas completadas de un usuario específico
     @GetMapping("/{idUsuario}/completadas")
     public ResponseEntity<List<TareaEntity>> obtenerTareasCompletadas(@PathVariable int idUsuario) {
@@ -40,14 +55,15 @@ public class TareaService {
     }
 
     // Crear una nueva tarea
-    @PostMapping
-    public ResponseEntity<TareaEntity> crearTarea(@RequestBody TareaEntity nuevaTarea) {
-        if (nuevaTarea.getUsuario() == null) {
+    @PostMapping("/{idUsuario}")
+    public ResponseEntity<TareaEntity> crearTarea(@PathVariable int idUsuario, @RequestBody TareaEntity nuevaTarea) {
+        if (idUsuario <= 0) {  // Puedes tener otras validaciones según tus necesidades.
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-        TareaEntity tarea = tareaRepository.createTarea(nuevaTarea, nuevaTarea.getUsuario().getId());
+        TareaEntity tarea = tareaRepository.createTarea(nuevaTarea, idUsuario);
         return ResponseEntity.status(HttpStatus.CREATED).body(tarea);
     }
+
 
     // Actualizar una tarea
     @PutMapping("/{idTarea}")
